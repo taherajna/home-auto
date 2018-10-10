@@ -42,6 +42,6 @@ public class RequestController {
   @ResponseBody
   @GetMapping(value = "/off21")
   public void turnOffRelay1(HttpServletResponse httpServletResponse) {
-    relayModule.turnOn21();
+    relayModule.turnOff21();
   }
 }
