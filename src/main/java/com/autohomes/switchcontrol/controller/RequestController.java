@@ -1,6 +1,6 @@
 package com.autohomes.switchcontrol.controller;
 
-import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.autohomes.switchcontrol.gpiocontrol.RelayModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +16,9 @@ import java.util.Map;
 @Controller
 public class RequestController {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(RequestController.class);
+  @Autowired private RelayModule relayModule;
 
-  @Autowired private GpioPinDigitalOutput gpioPin21;
+  private static final Logger LOGGER = LoggerFactory.getLogger(RequestController.class);
 
   @ResponseBody
   @RequestMapping("/")
@@ -36,12 +36,12 @@ public class RequestController {
   @ResponseBody
   @GetMapping(value = "/on21")
   public void turnOnRelay1(HttpServletResponse httpServletResponse) {
-    gpioPin21.high();
+    relayModule.turnOn21();
   }
 
   @ResponseBody
   @GetMapping(value = "/off21")
   public void turnOffRelay1(HttpServletResponse httpServletResponse) {
-    gpioPin21.low();
+    relayModule.turnOn21();
   }
 }
