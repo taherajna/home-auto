@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,13 +34,13 @@ public class RequestController {
   }
 
   @ResponseBody
-  @PostMapping(value = "/on21")
+  @GetMapping(value = "/on21")
   public void turnOnRelay1(HttpServletResponse httpServletResponse) {
     gpioPin21.high();
   }
 
   @ResponseBody
-  @PostMapping(value = "/off21")
+  @GetMapping(value = "/off21")
   public void turnOffRelay1(HttpServletResponse httpServletResponse) {
     gpioPin21.low();
   }
