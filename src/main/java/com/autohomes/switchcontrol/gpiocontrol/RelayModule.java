@@ -10,7 +10,7 @@ public class RelayModule {
   private GpioPinDigitalOutput pin29;
 
   public void turnOn21() {
-    if (pin29 != null) {
+    if (pin29 == null) {
       pin29 = GpioFactory.getInstance().provisionDigitalOutputPin(RaspiPin.GPIO_29, PinState.LOW);
       pin29.setShutdownOptions(true, PinState.LOW);
     }
