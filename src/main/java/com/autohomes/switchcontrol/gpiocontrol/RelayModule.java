@@ -9,15 +9,16 @@ public class RelayModule {
 
   private GpioPinDigitalOutput pin29;
 
+  public RelayModule() {
+    pin29 = GpioFactory.getInstance().provisionDigitalOutputPin(RaspiPin.GPIO_29, PinState.HIGH);
+    pin29.setShutdownOptions(true, PinState.LOW);
+  }
+
   public void turnOn21() {
-    if (pin29 == null) {
-      pin29 = GpioFactory.getInstance().provisionDigitalOutputPin(RaspiPin.GPIO_29, PinState.LOW);
-      pin29.setShutdownOptions(true, PinState.LOW);
-    }
+    pin29.low();
   }
 
   public void turnOff21() {
-    pin29 = null;
-    GpioFactory.getInstance().shutdown();
+    pin29.high();
   }
 }
