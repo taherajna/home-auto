@@ -1,47 +1,50 @@
 package com.autohomes.switchcontrol.controller;
 
+import com.autohomes.switchcontrol.gpiocontrol.BoardControl;
+import com.autohomes.switchcontrol.gpiocontrol.BoardPin;
 import com.autohomes.switchcontrol.gpiocontrol.RelayModule;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class RequestController {
 
   @Autowired private RelayModule relayModule;
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(RequestController.class);
+  @Autowired private Map<Integer, BoardControl> nodes;
 
   @ResponseBody
   @RequestMapping("/")
-  public String welcome(Map<String, Object> model) {
-    model.put("message", "message");
-    return "welcome";
+  public String welcome() {
+    return "Welcome!";
   }
 
   @ResponseBody
-  @PostMapping(value = "/PrintHelloWorld")
-  public void printHelloWorld(HttpServletResponse httpServletResponse) {
-    LOGGER.info("HelloWorld!");
+  @GetMapping(value = "/PrintHelloWorld")
+  public String printHelloWorld(HttpServletResponse httpServletResponse) {
+    return "Hello World!";
   }
 
   @ResponseBody
-  @GetMapping(value = "/on21")
-  public void turnOnRelay1(HttpServletResponse httpServletResponse) {
-    relayModule.turnOn21();
-  }
-
-  @ResponseBody
-  @GetMapping(value = "/off21")
-  public void turnOffRelay1(HttpServletResponse httpServletResponse) {
-    relayModule.turnOff21();
+  @GetMapping(value = "/control")
+  public String controlSwitch(
+      @RequestParam(value = "node") int nodeId,
+      @RequestParam(value = "pin") int pinNumber,
+      @RequestParam(value = "state") int state) {
+    String response;
+    BoardControl boardControl = nodes.get(nodeId);
+    if (boardControl != null) {
+      boardControl.controlSwitch(new BoardPin(pinNumber), state);
+      response = "Command executed!";
+    } else {
+      response = "Invalid node!";
+    }
+    return response;
   }
 }
