@@ -1,0 +1,9 @@
+AT+IP=9600
+AT+CWMODE=1
+AT+CWJAP=apName,apKey
+AT+CIPMUX=1
+AT+CIPSERVER=1,4000
+
+
+RX Black
+TX Yellow

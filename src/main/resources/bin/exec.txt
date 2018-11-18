@@ -1,0 +1,7 @@
+java -Dpi4j.linking=dynamic -classpath ./*: ControlGpioExample
+
+java -agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=n -Dpi4j.linking=dynamic -jar target/switchcontrol-0.0.1-SNAPSHOT.jar
+
+java -Dpi4j.linking=dynamic -jar target/switchcontrol-0.0.1-SNAPSHOT.jar
+
+192.168.43.86

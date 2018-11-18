@@ -1,0 +1,89 @@
+#include <ESP8266WiFi.h>
+
+const char* ssid = "TNT";   //put your SSID of the router to connect with
+const char* pass = "Taher0210";   //put your password of the router to connect with
+String responce;
+uint8_t relayPins[] = {D7};
+int pinState;
+
+WiFiServer server(4000);
+WiFiClient client;
+void setup()
+{
+  Serial.begin(115200);
+  while (!Serial) {
+    //Waiting for Serial to initialize
+  }
+  pinMode(D7, OUTPUT);
+  for (uint8_t relayPin : relayPins) {
+    digitalWrite(relayPin, 1);
+  }
+
+  Serial.println();
+  Serial.print("Connecting to............");
+  Serial.println(ssid);
+
+  WiFi.begin(ssid, pass);
+
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+
+  server.begin();
+  Serial.println("Server started.....");
+
+  Serial.println(WiFi.localIP());
+
+}
+
+void loop()
+{
+
+  if (!client) {
+    Serial.print("Waiting for client to connect");
+    while (!client)
+    {
+
+      client = server.available();
+      delay(200);
+      Serial.print(".");
+    }
+    Serial.println("Connected!");
+  }
+
+  if (!client.available())
+  {
+    delay(200);
+    return;
+  }
+
+  String request = client.readStringUntil('\r');
+  Serial.println(request);
+  client.flush();
+
+  if (request.indexOf("pin=") != -1) {
+    uint8_t outputPin = relayPins[request[(request.indexOf("pin=") + 1)]];
+    if (request.indexOf("state=on") != -1)
+    {
+      pinState = 0;
+      responce = ("Turning on pin " + outputPin);
+    }
+    else if (request.indexOf("state=off") != -1)
+    {
+      pinState = 1;
+      responce = ("Turning off pin " + outputPin);
+    }
+    digitalWrite(outputPin, pinState);
+  } else {
+    Serial.println("invalid request");
+    return;
+  }
+
+  client.flush();
+  client.print(responce);
+}
