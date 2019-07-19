@@ -2,11 +2,9 @@
 #define RX 10
 #define TX 11
 
-String AP = "TNT2";
-String PASS = "taher1052";
+String AP = "TNT";
+String PASS = "Taher2232";
 
-//String AP = "TNT";
-//String PASS = "Taher0210";
 String SERVER_PORT = "4000";
 int relaySwitchPinNumber = 2;
 
@@ -19,7 +17,7 @@ void setup() {
   sendCommand("AT+RST\r\n", 5, "OK");
   sendCommand("AT+CWMODE=1\r\n", 5, "OK");
   sendCommand("AT+CWJAP=\"" + AP + "\",\"" + PASS + "\"\r\n", 20, "OK");
-  sendCommand("AT+CIPMUX=1\r\n", 5, "OK");
+  sendCommand("AT+CIPMUX=0\r\n", 5, "OK");
   sendCommand("AT+CIPSERVER=1," + SERVER_PORT + "\r\n", 5, "OK");
 
   initializePin(relaySwitchPinNumber);
@@ -39,7 +37,6 @@ void loop() {
       Serial.print("Found IPD!\r\n");
       delay(1000);
       if (esp8266.find("pin=")) {
-        int connectionId = esp8266.read() - 48;
         int originalPinNumber = esp8266.peek();
         Serial.print("Received request from: ");
         Serial.print(connectionId);
@@ -56,12 +53,6 @@ void loop() {
         Serial.print("\r\n");
 
         digitalWrite(pinNumber, !digitalRead(pinNumber)); // toggle pin
-
-        String closeCommand = "AT+CIPCLOSE=";
-        closeCommand += connectionId; // append connection id
-        closeCommand += "\r\n";
-        sendCommand(closeCommand, 5, "OK"); // close connection
-        sendCommand("AT+CIPCLOSE\r\n", 5, "OK"); // close connection
       }
     }
   }
