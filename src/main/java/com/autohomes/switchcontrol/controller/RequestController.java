@@ -2,7 +2,6 @@ package com.autohomes.switchcontrol.controller;
 
 import com.autohomes.switchcontrol.gpiocontrol.BoardControl;
 import com.autohomes.switchcontrol.gpiocontrol.BoardPin;
-import com.autohomes.switchcontrol.gpiocontrol.RelayModule;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class RequestController {
-
-  @Autowired private RelayModule relayModule;
 
   @Autowired private Map<Integer, BoardControl> nodes;
 
